@@ -68,22 +68,21 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Focus(
         onKey: (node, event) {
           if (event.repeat || event is! RawKeyDownEvent) {
-            logger.v("dismissed: $event");
             return KeyEventResult.ignored;
           }
 
           if (event.physicalKey == PhysicalKeyboardKey.arrowDown ||
               event.physicalKey == PhysicalKeyboardKey.keyS) {
-            _model.goDown();
+            _model.currentDirection = Direction.down;
           } else if (event.physicalKey == PhysicalKeyboardKey.arrowUp ||
               event.physicalKey == PhysicalKeyboardKey.keyW) {
-            _model.goUp();
+            _model.currentDirection = Direction.up;
           } else if (event.physicalKey == PhysicalKeyboardKey.arrowLeft ||
               event.physicalKey == PhysicalKeyboardKey.keyA) {
-            _model.goLeft();
+            _model.currentDirection = Direction.left;
           } else if (event.physicalKey == PhysicalKeyboardKey.arrowRight ||
               event.physicalKey == PhysicalKeyboardKey.keyD) {
-            _model.goRight();
+            _model.currentDirection = Direction.right;
           } else {
             return KeyEventResult.ignored;
           }

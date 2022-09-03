@@ -13,31 +13,27 @@ class GameStateModel {
 
   int get size => snake.queueSize;
 
-  Direction? currentDirection;
+  final _opposingDirections = {
+    Direction.up: Direction.down,
+    Direction.down: Direction.up,
+    Direction.left: Direction.right,
+    Direction.right: Direction.left,
+  };
+  var _direction = Direction.none;
+  Direction get currentDirection => _direction;
+  set currentDirection(Direction direction) {
+    if (direction != _opposingDirections[_direction]) {
+      _direction = direction;
+      logger.d("update direction: $_direction");
+    }
+  }
+
+  GameState state = GameState.none;
 
   GameStateModel() {
     snake.enqueue(Point(gridSize ~/ 2, gridSize ~/ 2));
     newFood();
-  }
-
-  void goUp() {
-    currentDirection = Direction.up;
-    logger.d("update direction: $currentDirection");
-  }
-
-  void goDown() {
-    currentDirection = Direction.down;
-    logger.d("update direction: $currentDirection");
-  }
-
-  void goRight() {
-    currentDirection = Direction.right;
-    logger.d("update direction: $currentDirection");
-  }
-
-  void goLeft() {
-    currentDirection = Direction.left;
-    logger.d("update direction: $currentDirection");
+    state = GameState.running;
   }
 
   void move() {
@@ -78,4 +74,6 @@ class GameStateModel {
   }
 }
 
-enum Direction { up, down, left, right }
+enum Direction { none, up, down, left, right }
+
+enum GameState { none, running, collision }
