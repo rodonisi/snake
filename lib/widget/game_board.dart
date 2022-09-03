@@ -46,7 +46,7 @@ class _GameBoardState extends State<GameBoard> {
   Widget build(BuildContext context) {
     _grid = List.generate(
       widget.model.gridSize * widget.model.gridSize,
-      (index) => Container(),
+      (index) => const Card(),
     );
     for (var p in widget.model.snake) {
       final i = (p.y * widget.model.gridSize + p.x);
@@ -59,8 +59,8 @@ class _GameBoardState extends State<GameBoard> {
 
     return GridView.count(
       shrinkWrap: true,
-      crossAxisSpacing: .5,
-      mainAxisSpacing: .5,
+      crossAxisSpacing: 0,
+      mainAxisSpacing: 0,
       crossAxisCount: widget.model.gridSize,
       children: _grid,
     );
