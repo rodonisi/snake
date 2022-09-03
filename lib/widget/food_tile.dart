@@ -13,8 +13,10 @@ class FoodTile extends StatelessWidget {
     final index = Random().nextInt(chars.length);
     return FittedBox(
       fit: BoxFit.fill,
-      child: Text(
-        chars.elementAt(index),
+      child: Center(
+        child: Text(
+          chars.elementAt(index),
+        ),
       ),
     );
   }
