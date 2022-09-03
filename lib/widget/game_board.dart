@@ -1,13 +1,13 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:snake/model/game_state_model.dart';
+import 'package:snake/controller/game_state_controller.dart';
 import 'package:snake/widget/food_tile.dart';
 import 'package:snake/widget/snake_tile.dart';
 
 class GameBoard extends StatefulWidget {
-  final GameStateModel model;
-  const GameBoard({Key? key, required this.model}) : super(key: key);
+  final GameStateController controller;
+  const GameBoard({Key? key, required this.controller}) : super(key: key);
 
   @override
   State<GameBoard> createState() => _GameBoardState();
@@ -25,9 +25,9 @@ class _GameBoardState extends State<GameBoard> {
   }
 
   void _timerCallback(Timer timer) {
-    widget.model.move();
+    widget.controller.move();
     setState(() {
-      if (widget.model.speed < _currentSpeed) {
+      if (widget.controller.speed != _currentSpeed) {
         _refreshTimer();
       }
     });
@@ -36,32 +36,32 @@ class _GameBoardState extends State<GameBoard> {
   void _refreshTimer() {
     _timer.cancel();
     _timer = Timer.periodic(
-      Duration(milliseconds: widget.model.speed),
+      Duration(milliseconds: widget.controller.speed),
       _timerCallback,
     );
-    _currentSpeed = widget.model.speed;
+    _currentSpeed = widget.controller.speed;
   }
 
   @override
   Widget build(BuildContext context) {
     _grid = List.generate(
-      widget.model.gridSize * widget.model.gridSize,
+      widget.controller.gridSize * widget.controller.gridSize,
       (index) => const Card(),
     );
-    for (var p in widget.model.snake) {
-      final i = (p.y * widget.model.gridSize + p.x);
+    for (var p in widget.controller.snake) {
+      final i = (p.y * widget.controller.gridSize + p.x);
       _grid[i] = const SnakeTile();
     }
 
-    final gridIndex =
-        widget.model.food.y * widget.model.gridSize + widget.model.food.x;
+    final gridIndex = widget.controller.food.y * widget.controller.gridSize +
+        widget.controller.food.x;
     _grid[gridIndex] = const FoodTile();
 
     return GridView.count(
       shrinkWrap: true,
       crossAxisSpacing: 0,
       mainAxisSpacing: 0,
-      crossAxisCount: widget.model.gridSize,
+      crossAxisCount: widget.controller.gridSize,
       children: _grid,
     );
   }

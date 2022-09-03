@@ -37,23 +37,24 @@ class GameStateModel {
   }
 
   void move() {
-    final head = snake.head;
+    var head = snake.head;
     switch (currentDirection) {
       case Direction.up:
-        snake.enqueue(Point(head.x, (head.y - 1) % gridSize));
+        head = Point(head.x, (head.y - 1) % gridSize);
         break;
       case Direction.down:
-        snake.enqueue(Point(head.x, (head.y + 1) % gridSize));
+        head = Point(head.x, (head.y + 1) % gridSize);
         break;
       case Direction.left:
-        snake.enqueue(Point((head.x - 1) % gridSize, head.y));
+        head = Point((head.x - 1) % gridSize, head.y);
         break;
       case Direction.right:
-        snake.enqueue(Point((head.x + 1) % gridSize, head.y));
+        head = Point((head.x + 1) % gridSize, head.y);
         break;
       default:
-        break;
+        return;
     }
+    checkCollision(head);
     checkFood();
   }
 
@@ -63,13 +64,21 @@ class GameStateModel {
   }
 
   void checkFood() {
-    if (snake.head == food) {
+    if (snake.contains(food)) {
       newFood();
       snake.queueSize += 1;
       if (speed > maxSpeed) {
         speed -= speed ~/ speedIncreaseStep;
       }
       logger.d("size: $size, speed: $speed");
+    }
+  }
+
+  void checkCollision(Point<int> newHead) {
+    if (snake.contains(newHead)) {
+      state = GameState.collision;
+    } else {
+      snake.enqueue(newHead);
     }
   }
 }
