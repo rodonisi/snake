@@ -10,8 +10,10 @@ class GameStateModel {
   int speed = 700;
   int maxSpeed = 100;
   int speedIncreaseStep = 10;
-  int get size => snake.queueSize;
+  GameState state = GameState.none;
   var _direction = Direction.none;
+
+  int get size => snake.queueSize;
   Direction get currentDirection => _direction;
   set currentDirection(Direction direction) {
     if (checkLegalTurn(direction)) {
@@ -22,8 +24,6 @@ class GameStateModel {
       state = GameState.running;
     }
   }
-
-  GameState state = GameState.none;
 
   GameStateModel() {
     snake.enqueue(Point(gridSize ~/ 2, gridSize ~/ 2));
