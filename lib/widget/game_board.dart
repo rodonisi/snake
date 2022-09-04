@@ -25,7 +25,7 @@ class _GameBoardState extends State<GameBoard> {
   }
 
   void _timerCallback(Timer timer) {
-    widget.controller.move();
+    widget.controller.refresh();
     setState(() {
       if (widget.controller.speed != _currentSpeed) {
         _refreshTimer();
