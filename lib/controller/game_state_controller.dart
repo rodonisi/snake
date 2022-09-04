@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:snake/helpers/global_logger.dart';
 import 'package:snake/model/game_state_model.dart';
 import 'package:snake/utility/fixed_queue.dart';
 
@@ -15,8 +16,10 @@ class GameStateController {
   Point<int> get food => _model.food;
 
   void move() {
-    _model.move();
-    if (_model.state == GameState.collision) {
+    if (_model.state == GameState.running) {
+      _model.move();
+    } else if (_model.state == GameState.collision) {
+      logger.d("restart game");
       _model = GameStateModel();
     }
   }

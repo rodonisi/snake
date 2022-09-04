@@ -10,21 +10,16 @@ class GameStateModel {
   int speed = 700;
   int maxSpeed = 100;
   int speedIncreaseStep = 10;
-
   int get size => snake.queueSize;
-
-  final _opposingDirections = {
-    Direction.up: Direction.down,
-    Direction.down: Direction.up,
-    Direction.left: Direction.right,
-    Direction.right: Direction.left,
-  };
   var _direction = Direction.none;
   Direction get currentDirection => _direction;
   set currentDirection(Direction direction) {
-    if (direction != _opposingDirections[_direction]) {
+    if (checkLegalTurn(direction)) {
       _direction = direction;
       logger.d("update direction: $_direction");
+    }
+    if (state == GameState.none) {
+      state = GameState.running;
     }
   }
 
@@ -33,29 +28,14 @@ class GameStateModel {
   GameStateModel() {
     snake.enqueue(Point(gridSize ~/ 2, gridSize ~/ 2));
     newFood();
-    state = GameState.running;
   }
 
   void move() {
-    var head = snake.head;
-    switch (currentDirection) {
-      case Direction.up:
-        head = Point(head.x, (head.y - 1) % gridSize);
-        break;
-      case Direction.down:
-        head = Point(head.x, (head.y + 1) % gridSize);
-        break;
-      case Direction.left:
-        head = Point((head.x - 1) % gridSize, head.y);
-        break;
-      case Direction.right:
-        head = Point((head.x + 1) % gridSize, head.y);
-        break;
-      default:
-        return;
+    final nextHead = computeNextPoint(currentDirection);
+    if (nextHead != null) {
+      checkCollision(nextHead);
+      checkFood();
     }
-    checkCollision(head);
-    checkFood();
   }
 
   void newFood() {
@@ -80,6 +60,32 @@ class GameStateModel {
     } else {
       snake.enqueue(newHead);
     }
+  }
+
+  Point<int>? computeNextPoint(Direction direction) {
+    var head = snake.head;
+    switch (direction) {
+      case Direction.up:
+        head = Point(head.x, (head.y - 1) % gridSize);
+        break;
+      case Direction.down:
+        head = Point(head.x, (head.y + 1) % gridSize);
+        break;
+      case Direction.left:
+        head = Point((head.x - 1) % gridSize, head.y);
+        break;
+      case Direction.right:
+        head = Point((head.x + 1) % gridSize, head.y);
+        break;
+      default:
+        return null;
+    }
+    return head;
+  }
+
+  bool checkLegalTurn(Direction direction) {
+    final next = computeNextPoint(direction);
+    return snake.length < 2 || next != snake.elementAt(1);
   }
 }
 
