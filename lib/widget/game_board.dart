@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:snake/controller/game_state_controller.dart';
@@ -14,7 +15,6 @@ class GameBoard extends StatefulWidget {
 }
 
 class _GameBoardState extends State<GameBoard> {
-  List<Widget> _grid = [];
   late Timer _timer;
   int _currentSpeed = 1000;
 
@@ -44,25 +44,25 @@ class _GameBoardState extends State<GameBoard> {
 
   @override
   Widget build(BuildContext context) {
-    _grid = List.generate(
-      widget.controller.gridSize * widget.controller.gridSize,
-      (index) => const Card(),
-    );
-    for (var p in widget.controller.snake) {
-      final i = (p.y * widget.controller.gridSize + p.x);
-      _grid[i] = const SnakeTile();
-    }
-
-    final gridIndex = widget.controller.food.y * widget.controller.gridSize +
-        widget.controller.food.x;
-    _grid[gridIndex] = const FoodTile();
-
-    return GridView.count(
+    return GridView.builder(
       shrinkWrap: true,
-      crossAxisSpacing: 0,
-      mainAxisSpacing: 0,
-      crossAxisCount: widget.controller.gridSize,
-      children: _grid,
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: widget.controller.gridSize,
+      ),
+      itemCount: widget.controller.gridSize * widget.controller.gridSize,
+      itemBuilder: (BuildContext context, int index) {
+        final y = index ~/ widget.controller.gridSize;
+        final x = index - y * widget.controller.gridSize;
+        final point = Point(x, y);
+        if (widget.controller.snake.contains(point)) {
+          return const SnakeTile();
+        }
+        if (widget.controller.food == point) {
+          return const FoodTile();
+        }
+
+        return const Card();
+      },
     );
   }
 }
