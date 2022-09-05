@@ -11,7 +11,7 @@ class GameModel {
   int maxSpeed = 100;
   int speedIncreaseStep = 10;
   GameState state = GameState.none;
-  var _direction = Direction.none;
+  var _direction = Direction.down;
 
   int get size => snake.queueSize;
   Direction get currentDirection => _direction;
@@ -32,10 +32,8 @@ class GameModel {
 
   void move() {
     final nextHead = computeNextPoint(currentDirection);
-    if (nextHead != null) {
-      checkCollision(nextHead);
-      checkFood();
-    }
+    checkCollision(nextHead);
+    checkFood();
   }
 
   void newFood() {
@@ -55,32 +53,19 @@ class GameModel {
   }
 
   void checkCollision(Point<int> newHead) {
-    if (snake.contains(newHead)) {
+    if (snake.contains(newHead) ||
+        newHead.x < 0 ||
+        newHead.x >= gridSize ||
+        newHead.y < 0 ||
+        newHead.y >= gridSize) {
       state = GameState.collision;
     } else {
       snake.enqueue(newHead);
     }
   }
 
-  Point<int>? computeNextPoint(Direction direction) {
-    var head = snake.head;
-    switch (direction) {
-      case Direction.up:
-        head = Point(head.x, (head.y - 1) % gridSize);
-        break;
-      case Direction.down:
-        head = Point(head.x, (head.y + 1) % gridSize);
-        break;
-      case Direction.left:
-        head = Point((head.x - 1) % gridSize, head.y);
-        break;
-      case Direction.right:
-        head = Point((head.x + 1) % gridSize, head.y);
-        break;
-      default:
-        return null;
-    }
-    return head;
+  Point<int> computeNextPoint(Direction direction) {
+    return snake.head + direction.shift;
   }
 
   bool checkLegalTurn(Direction direction) {
@@ -89,6 +74,14 @@ class GameModel {
   }
 }
 
-enum Direction { none, up, down, left, right }
+enum Direction {
+  up(Point(0, -1)),
+  down(Point(0, 1)),
+  left(Point(-1, 0)),
+  right(Point(1, 0));
+
+  final Point<int> shift;
+  const Direction(this.shift);
+}
 
 enum GameState { none, running, collision }
