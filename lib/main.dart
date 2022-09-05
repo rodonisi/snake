@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:snake/controller/game_state_controller.dart';
+import 'package:snake/controller/game_view_model.dart';
 import 'package:snake/helpers/platform_helpers.dart';
-import 'package:snake/model/game_state_model.dart';
+import 'package:snake/model/game_model.dart';
 import 'package:snake/widget/controls.dart';
 import 'package:snake/widget/game_board.dart';
 
@@ -45,7 +45,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final _controller = GameStateController();
+  final _viewModel = GameViewModel();
 
   @override
   Widget build(BuildContext context) {
@@ -58,16 +58,16 @@ class _MyHomePageState extends State<MyHomePage> {
 
           if (event.physicalKey == PhysicalKeyboardKey.arrowDown ||
               event.physicalKey == PhysicalKeyboardKey.keyS) {
-            _controller.currentDirection = Direction.down;
+            _viewModel.currentDirection = Direction.down;
           } else if (event.physicalKey == PhysicalKeyboardKey.arrowUp ||
               event.physicalKey == PhysicalKeyboardKey.keyW) {
-            _controller.currentDirection = Direction.up;
+            _viewModel.currentDirection = Direction.up;
           } else if (event.physicalKey == PhysicalKeyboardKey.arrowLeft ||
               event.physicalKey == PhysicalKeyboardKey.keyA) {
-            _controller.currentDirection = Direction.left;
+            _viewModel.currentDirection = Direction.left;
           } else if (event.physicalKey == PhysicalKeyboardKey.arrowRight ||
               event.physicalKey == PhysicalKeyboardKey.keyD) {
-            _controller.currentDirection = Direction.right;
+            _viewModel.currentDirection = Direction.right;
           } else {
             return KeyEventResult.ignored;
           }
@@ -78,10 +78,10 @@ class _MyHomePageState extends State<MyHomePage> {
           bottom: true,
           child: Column(
             children: [
-              GameBoard(controller: _controller),
+              GameBoard(viewModel: _viewModel),
               if (isMobile) ...[
                 const Spacer(),
-                Controls(controller: _controller),
+                Controls(viewModel: _viewModel),
               ]
             ],
           ),

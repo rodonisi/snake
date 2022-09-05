@@ -1,11 +1,11 @@
 import 'dart:math';
 
 import 'package:snake/helpers/global_logger.dart';
-import 'package:snake/model/game_state_model.dart';
+import 'package:snake/model/game_model.dart';
 import 'package:snake/utility/fixed_queue.dart';
 
-class GameStateController {
-  GameStateModel _model = GameStateModel();
+class GameViewModel {
+  var _model = GameModel();
 
   Direction get currentDirection => _model.currentDirection;
   set currentDirection(Direction direction) =>
@@ -20,7 +20,7 @@ class GameStateController {
       _model.move();
     } else if (_model.state == GameState.collision) {
       logger.d("restart game");
-      _model = GameStateModel();
+      _model = GameModel();
     }
   }
 }

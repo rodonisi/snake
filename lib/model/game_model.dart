@@ -3,11 +3,11 @@ import 'dart:math';
 import 'package:snake/helpers/global_logger.dart';
 import 'package:snake/utility/fixed_queue.dart';
 
-class GameStateModel {
+class GameModel {
   final gridSize = 20;
   final snake = FixedQueue<Point<int>>(1);
   Point<int> food = const Point(0, 0);
-  int speed = 700;
+  int speed = 200;
   int maxSpeed = 100;
   int speedIncreaseStep = 10;
   GameState state = GameState.none;
@@ -25,7 +25,7 @@ class GameStateModel {
     }
   }
 
-  GameStateModel() {
+  GameModel() {
     snake.enqueue(Point(gridSize ~/ 2, gridSize ~/ 2));
     newFood();
   }
