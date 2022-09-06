@@ -6,6 +6,7 @@ import 'package:snake/helpers/platform_helpers.dart';
 import 'package:snake/model/game_model.dart';
 import 'package:snake/widget/controls.dart';
 import 'package:snake/widget/game_board.dart';
+import 'package:snake/widget/score.dart';
 
 void main() {
   final game = GameNotifier();
@@ -55,6 +56,9 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     var notifier = context.read<GameNotifier>();
     return Scaffold(
+      appBar: AppBar(
+        title: const Score(),
+      ),
       body: Focus(
         onKey: (node, event) {
           if (event.repeat || event is! RawKeyDownEvent) {

@@ -2,7 +2,7 @@ import 'dart:collection';
 
 class FixedQueue<T> extends Iterable<T> {
   final _queue = Queue<T>();
-  int queueSize = 1;
+  int queueSize;
 
   FixedQueue(this.queueSize);
 

@@ -4,8 +4,9 @@ import 'package:snake/helpers/global_logger.dart';
 import 'package:snake/utility/fixed_queue.dart';
 
 class GameModel {
+  static const initialSize = 4;
   final gridSize = 20;
-  final snake = FixedQueue<Point<int>>(4);
+  final snake = FixedQueue<Point<int>>(initialSize);
   Point<int> food = const Point(0, 0);
   int speed = 1000 ~/ 6;
   GameState state = GameState.none;

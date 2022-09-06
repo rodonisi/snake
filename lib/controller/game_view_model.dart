@@ -12,6 +12,7 @@ class GameNotifier extends ChangeNotifier {
   int get gridSize => _model.gridSize;
   Point<int> get food => _model.food;
   FixedQueue<Point<int>> get snake => _model.snake;
+  int get score => _model.snake.queueSize - GameModel.initialSize;
 
   set direction(Direction direction) {
     _model.currentDirection = direction;

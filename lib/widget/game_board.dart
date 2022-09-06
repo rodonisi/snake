@@ -16,6 +16,7 @@ class GameBoard extends StatelessWidget {
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: notifier.gridSize,
       ),
+      physics: const NeverScrollableScrollPhysics(),
       itemCount: notifier.gridSize * notifier.gridSize,
       itemBuilder: (BuildContext context, int index) {
         final y = index ~/ notifier.gridSize;
