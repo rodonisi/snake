@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import 'package:snake/controller/game_view_model.dart';
 import 'package:snake/helpers/platform_helpers.dart';
 import 'package:snake/model/game_model.dart';
@@ -7,7 +8,12 @@ import 'package:snake/widget/controls.dart';
 import 'package:snake/widget/game_board.dart';
 
 void main() {
-  runApp(const MyApp());
+  final game = GameNotifier();
+  game.start();
+  runApp(ChangeNotifierProvider.value(
+    value: game,
+    child: const MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -45,10 +51,9 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final _viewModel = GameViewModel();
-
   @override
   Widget build(BuildContext context) {
+    var notifier = context.read<GameNotifier>();
     return Scaffold(
       body: Focus(
         onKey: (node, event) {
@@ -58,16 +63,16 @@ class _MyHomePageState extends State<MyHomePage> {
 
           if (event.physicalKey == PhysicalKeyboardKey.arrowDown ||
               event.physicalKey == PhysicalKeyboardKey.keyS) {
-            _viewModel.currentDirection = Direction.down;
+            notifier.direction = Direction.down;
           } else if (event.physicalKey == PhysicalKeyboardKey.arrowUp ||
               event.physicalKey == PhysicalKeyboardKey.keyW) {
-            _viewModel.currentDirection = Direction.up;
+            notifier.direction = Direction.up;
           } else if (event.physicalKey == PhysicalKeyboardKey.arrowLeft ||
               event.physicalKey == PhysicalKeyboardKey.keyA) {
-            _viewModel.currentDirection = Direction.left;
+            notifier.direction = Direction.left;
           } else if (event.physicalKey == PhysicalKeyboardKey.arrowRight ||
               event.physicalKey == PhysicalKeyboardKey.keyD) {
-            _viewModel.currentDirection = Direction.right;
+            notifier.direction = Direction.right;
           } else {
             return KeyEventResult.ignored;
           }
@@ -78,10 +83,10 @@ class _MyHomePageState extends State<MyHomePage> {
           bottom: true,
           child: Column(
             children: [
-              GameBoard(viewModel: _viewModel),
+              const GameBoard(),
               if (isMobile) ...[
                 const Spacer(),
-                Controls(viewModel: _viewModel),
+                const Controls(),
               ]
             ],
           ),

@@ -5,11 +5,9 @@ import 'package:snake/utility/fixed_queue.dart';
 
 class GameModel {
   final gridSize = 20;
-  final snake = FixedQueue<Point<int>>(1);
+  final snake = FixedQueue<Point<int>>(4);
   Point<int> food = const Point(0, 0);
-  int speed = 200;
-  int maxSpeed = 100;
-  int speedIncreaseStep = 10;
+  int speed = 1000 ~/ 6;
   GameState state = GameState.none;
   var _direction = Direction.down;
 
@@ -33,6 +31,7 @@ class GameModel {
   void move() {
     final nextHead = computeNextPoint(currentDirection);
     checkCollision(nextHead);
+    snake.enqueue(nextHead);
     checkFood();
   }
 
@@ -45,22 +44,17 @@ class GameModel {
     if (snake.contains(food)) {
       newFood();
       snake.queueSize += 1;
-      if (speed > maxSpeed) {
-        speed -= speed ~/ speedIncreaseStep;
-      }
       logger.d("size: $size, speed: $speed");
     }
   }
 
-  void checkCollision(Point<int> newHead) {
-    if (snake.contains(newHead) ||
-        newHead.x < 0 ||
-        newHead.x >= gridSize ||
-        newHead.y < 0 ||
-        newHead.y >= gridSize) {
+  void checkCollision(Point<int> nextHead) {
+    if (snake.contains(nextHead) ||
+        nextHead.x < 0 ||
+        nextHead.x >= gridSize ||
+        nextHead.y < 0 ||
+        nextHead.y >= gridSize) {
       state = GameState.collision;
-    } else {
-      snake.enqueue(newHead);
     }
   }
 
