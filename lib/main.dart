@@ -87,7 +87,10 @@ class _MyHomePageState extends State<MyHomePage> {
           bottom: true,
           child: Column(
             children: [
-              const GameBoard(),
+              const Card(
+                margin: EdgeInsets.all(16.0),
+                child: GameBoard(),
+              ),
               if (isMobile) ...[
                 const Spacer(),
                 const Controls(),
