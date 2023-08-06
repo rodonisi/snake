@@ -1,20 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
-import 'package:snake/controller/game_view_model.dart';
-import 'package:snake/helpers/platform_helpers.dart';
-import 'package:snake/model/game_model.dart';
+import 'package:snake/bloc/game_bloc.dart';
 import 'package:snake/widget/controls.dart';
 import 'package:snake/widget/game_board.dart';
 import 'package:snake/widget/score.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'helpers/platform_helpers.dart';
 
 void main() {
-  final game = GameNotifier();
-  game.start();
-  runApp(ChangeNotifierProvider.value(
-    value: game,
-    child: const MyApp(),
-  ));
+  runApp(
+    const MyApp(),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -28,7 +25,9 @@ class MyApp extends StatelessWidget {
       themeMode: ThemeMode.dark,
       darkTheme: ThemeData.dark(useMaterial3: true),
       theme: ThemeData.light(useMaterial3: true),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: BlocProvider(
+          create: (context) => SnakeBloc(),
+          child: const MyHomePage(title: 'Flutter Demo Home Page')),
     );
   }
 }
@@ -54,7 +53,6 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
-    var notifier = context.read<GameNotifier>();
     return Scaffold(
       appBar: AppBar(
         title: const Score(),
@@ -67,16 +65,16 @@ class _MyHomePageState extends State<MyHomePage> {
 
           if (event.physicalKey == PhysicalKeyboardKey.arrowDown ||
               event.physicalKey == PhysicalKeyboardKey.keyS) {
-            notifier.direction = Direction.down;
+            context.read<SnakeBloc>().add(Turn(Direction.down));
           } else if (event.physicalKey == PhysicalKeyboardKey.arrowUp ||
               event.physicalKey == PhysicalKeyboardKey.keyW) {
-            notifier.direction = Direction.up;
+            context.read<SnakeBloc>().add(Turn(Direction.up));
           } else if (event.physicalKey == PhysicalKeyboardKey.arrowLeft ||
               event.physicalKey == PhysicalKeyboardKey.keyA) {
-            notifier.direction = Direction.left;
+            context.read<SnakeBloc>().add(Turn(Direction.left));
           } else if (event.physicalKey == PhysicalKeyboardKey.arrowRight ||
               event.physicalKey == PhysicalKeyboardKey.keyD) {
-            notifier.direction = Direction.right;
+            context.read<SnakeBloc>().add(Turn(Direction.right));
           } else {
             return KeyEventResult.ignored;
           }

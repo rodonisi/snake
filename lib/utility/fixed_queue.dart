@@ -1,20 +1,31 @@
-import 'dart:collection';
+import 'package:equatable/equatable.dart';
 
-class FixedQueue<T> extends Iterable<T> {
-  final _queue = Queue<T>();
-  int queueSize;
+class FixedQueue<T> extends Iterable<T> with EquatableMixin {
+  final List<T> queue;
+  final int queueSize;
 
-  FixedQueue(this.queueSize);
+  const FixedQueue({required this.queueSize, this.queue = const []});
 
-  T get head => _queue.elementAt(0);
+  T get head => queue.first;
 
-  void enqueue(T e) {
-    _queue.addFirst(e);
-    if (_queue.length > queueSize) {
-      _queue.removeLast();
+  FixedQueue<T> enqueue(T e) {
+    final enqueued = [e, ...queue];
+    if (enqueued.length > queueSize) {
+      enqueued.removeLast();
     }
+    return copyWith(queue: enqueued);
   }
 
   @override
-  Iterator<T> get iterator => _queue.iterator;
+  Iterator<T> get iterator => queue.iterator;
+
+  FixedQueue<T> copyWith({int? queueSize, List<T>? queue}) {
+    return FixedQueue<T>(
+      queueSize: queueSize ?? this.queueSize,
+      queue: queue ?? this.queue,
+    );
+  }
+
+  @override
+  List<Object?> get props => [queue, queueSize];
 }

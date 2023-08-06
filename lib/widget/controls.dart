@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:snake/controller/game_view_model.dart';
-import 'package:snake/model/game_model.dart';
+import 'package:snake/bloc/game_bloc.dart';
 
 class Controls extends StatelessWidget {
   final double _iconSize = 48;
@@ -9,7 +8,7 @@ class Controls extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var viewModel = context.read<GameNotifier>();
+    var bloc = context.read<SnakeBloc>();
     return Column(
       children: [
         Row(
@@ -17,7 +16,7 @@ class Controls extends StatelessWidget {
             Expanded(
               child: IconButton(
                 iconSize: _iconSize,
-                onPressed: () => viewModel.direction = Direction.up,
+                onPressed: () => bloc.add(Turn(Direction.up)),
                 icon: const Icon(Icons.keyboard_arrow_up),
               ),
             )
@@ -29,14 +28,14 @@ class Controls extends StatelessWidget {
             Expanded(
               child: IconButton(
                 iconSize: _iconSize,
-                onPressed: () => viewModel.direction = Direction.left,
+                onPressed: () => bloc.add(Turn(Direction.left)),
                 icon: const Icon(Icons.keyboard_arrow_left),
               ),
             ),
             Expanded(
               child: IconButton(
                 iconSize: _iconSize,
-                onPressed: () => viewModel.direction = Direction.right,
+                onPressed: () => bloc.add(Turn(Direction.right)),
                 icon: const Icon(Icons.keyboard_arrow_right),
               ),
             ),
@@ -47,7 +46,7 @@ class Controls extends StatelessWidget {
             Expanded(
               child: IconButton(
                 iconSize: _iconSize,
-                onPressed: () => viewModel.direction = Direction.down,
+                onPressed: () => bloc.add(Turn(Direction.down)),
                 icon: const Icon(Icons.keyboard_arrow_down),
               ),
             )
