@@ -35,15 +35,6 @@ class MyApp extends StatelessWidget {
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
 
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
   final String title;
 
   @override
@@ -53,47 +44,45 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Score(),
-      ),
-      body: Focus(
-        onKey: (node, event) {
-          if (event.repeat || event is! RawKeyDownEvent) {
-            return KeyEventResult.ignored;
-          }
-
-          if (event.physicalKey == PhysicalKeyboardKey.arrowDown ||
-              event.physicalKey == PhysicalKeyboardKey.keyS) {
-            context.read<SnakeBloc>().add(Turn(Direction.down));
-          } else if (event.physicalKey == PhysicalKeyboardKey.arrowUp ||
-              event.physicalKey == PhysicalKeyboardKey.keyW) {
-            context.read<SnakeBloc>().add(Turn(Direction.up));
-          } else if (event.physicalKey == PhysicalKeyboardKey.arrowLeft ||
-              event.physicalKey == PhysicalKeyboardKey.keyA) {
-            context.read<SnakeBloc>().add(Turn(Direction.left));
-          } else if (event.physicalKey == PhysicalKeyboardKey.arrowRight ||
-              event.physicalKey == PhysicalKeyboardKey.keyD) {
-            context.read<SnakeBloc>().add(Turn(Direction.right));
-          } else {
-            return KeyEventResult.ignored;
-          }
-
-          return KeyEventResult.handled;
-        },
-        child: SafeArea(
-          bottom: true,
-          child: Column(
-            children: [
-              const Card(
-                margin: EdgeInsets.all(16.0),
-                child: GameBoard(),
-              ),
-              if (isMobile) ...[
-                const Spacer(),
-                const Controls(),
-              ]
-            ],
+    return CallbackShortcuts(
+      bindings: {
+        const SingleActivator(LogicalKeyboardKey.arrowDown): () =>
+            context.read<SnakeBloc>().add(
+                  Turn(Direction.down),
+                ),
+        const SingleActivator(LogicalKeyboardKey.arrowUp): () =>
+            context.read<SnakeBloc>().add(
+                  Turn(Direction.up),
+                ),
+        const SingleActivator(LogicalKeyboardKey.arrowLeft): () =>
+            context.read<SnakeBloc>().add(
+                  Turn(Direction.left),
+                ),
+        const SingleActivator(LogicalKeyboardKey.arrowRight): () =>
+            context.read<SnakeBloc>().add(
+                  Turn(Direction.right),
+                ),
+      },
+      child: Focus(
+        autofocus: true,
+        child: Scaffold(
+          appBar: AppBar(
+            title: const Score(),
+          ),
+          body: SafeArea(
+            bottom: true,
+            child: Column(
+              children: [
+                const Card(
+                  margin: EdgeInsets.all(16.0),
+                  child: GameBoard(),
+                ),
+                if (isMobile) ...[
+                  const Spacer(),
+                  const Controls(),
+                ]
+              ],
+            ),
           ),
         ),
       ),

@@ -2,7 +2,6 @@
 // - Packages
 // -----------------------------------------------------------------------------
 import 'package:logger/logger.dart';
-import 'dart:io';
 
 // -----------------------------------------------------------------------------
 // - Logger Declaration
@@ -15,6 +14,6 @@ final logger = Logger(
     printEmojis: true,
     printTime: true,
     lineLength: 120,
-    colors: stdout.supportsAnsiEscapes,
+    colors: true,
   ),
 );
