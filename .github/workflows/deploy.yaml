@@ -20,7 +20,7 @@ jobs:
           channel: 'stable'
 
       - name: Build Web 🌐
-        run: flutter build web --release
+        run: flutter build web --base-href /${{ github.event.repository.name }}/ --release
 
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4
