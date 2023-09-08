@@ -13,13 +13,15 @@ class Controls extends StatelessWidget {
       children: [
         Row(
           children: [
+            const Spacer(),
             Expanded(
               child: IconButton(
                 iconSize: _iconSize,
                 onPressed: () => bloc.add(Turn(Direction.up)),
                 icon: const Icon(Icons.keyboard_arrow_up),
               ),
-            )
+            ),
+            const Spacer(),
           ],
         ),
         Row(
@@ -43,13 +45,15 @@ class Controls extends StatelessWidget {
         ),
         Row(
           children: [
+            const Spacer(),
             Expanded(
               child: IconButton(
                 iconSize: _iconSize,
                 onPressed: () => bloc.add(Turn(Direction.down)),
                 icon: const Icon(Icons.keyboard_arrow_down),
               ),
-            )
+            ),
+            const Spacer(),
           ],
         ),
       ],
