@@ -27,6 +27,7 @@ class Controls extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
+            const Spacer(),
             Expanded(
               child: IconButton(
                 iconSize: _iconSize,
@@ -34,6 +35,7 @@ class Controls extends StatelessWidget {
                 icon: const Icon(Icons.keyboard_arrow_left),
               ),
             ),
+            const Spacer(),
             Expanded(
               child: IconButton(
                 iconSize: _iconSize,
@@ -41,6 +43,7 @@ class Controls extends StatelessWidget {
                 icon: const Icon(Icons.keyboard_arrow_right),
               ),
             ),
+            const Spacer(),
           ],
         ),
         Row(
