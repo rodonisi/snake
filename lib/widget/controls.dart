@@ -4,7 +4,7 @@ import 'package:snake/bloc/game_bloc.dart';
 
 class Controls extends StatelessWidget {
   final double _iconSize = 48;
-  const Controls({Key? key}) : super(key: key);
+  const Controls({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class SnakeTile extends StatelessWidget {
-  const SnakeTile({Key? key}) : super(key: key);
+  const SnakeTile({super.key});
 
   @override
   Widget build(BuildContext context) {

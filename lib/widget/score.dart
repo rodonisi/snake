@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:snake/bloc/game_bloc.dart';
 
 class Score extends StatelessWidget {
-  const Score({Key? key}) : super(key: key);
+  const Score({super.key});
 
   @override
   Widget build(BuildContext context) {
