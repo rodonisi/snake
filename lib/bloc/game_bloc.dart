@@ -86,7 +86,7 @@ class SnakeState extends Equatable {
 
   SnakeState move() {
     if (_isCollision(_nextPoint)) {
-      return SnakeState.initial();
+      return SnakeState.initial().copyWith(state: GameState.collision);
     }
 
     logger.d("move: $_nextPoint");

@@ -10,7 +10,10 @@ import 'helpers/platform_helpers.dart';
 
 void main() {
   runApp(
-    const MyApp(),
+    BlocProvider(
+      create: (context) => SnakeBloc(),
+      child: const MyApp(),
+    ),
   );
 }
 
@@ -25,10 +28,7 @@ class MyApp extends StatelessWidget {
       themeMode: ThemeMode.dark,
       darkTheme: ThemeData.dark(useMaterial3: true),
       theme: ThemeData.light(useMaterial3: true),
-      home: BlocProvider(
-        create: (context) => SnakeBloc(),
-        child: const MyHomePage(),
-      ),
+      home: const MyHomePage(),
     );
   }
 }
