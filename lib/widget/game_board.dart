@@ -10,19 +10,27 @@ class GameBoard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GridView.builder(
-      shrinkWrap: true,
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: SnakeState.gridSize,
-      ),
-      physics: const NeverScrollableScrollPhysics(),
-      itemCount: SnakeState.gridSize * SnakeState.gridSize,
-      itemBuilder: (BuildContext context, int index) {
-        final y = index ~/ SnakeState.gridSize;
-        final x = index - y * SnakeState.gridSize;
-        final point = Point(x, y);
-        return BoardTile(
-          point: point,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final size = min(constraints.maxWidth, constraints.maxHeight);
+        return SizedBox.square(
+          dimension: size,
+          child: GridView.builder(
+            shrinkWrap: true,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: SnakeState.gridSize,
+            ),
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: SnakeState.gridSize * SnakeState.gridSize,
+            itemBuilder: (BuildContext context, int index) {
+              final y = index ~/ SnakeState.gridSize;
+              final x = index - y * SnakeState.gridSize;
+              final point = Point(x, y);
+              return BoardTile(
+                point: point,
+              );
+            },
+          ),
         );
       },
     );

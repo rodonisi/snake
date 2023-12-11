@@ -67,9 +67,13 @@ class MyHomePage extends StatelessWidget {
             bottom: true,
             child: Column(
               children: [
-                const Card(
-                  margin: EdgeInsets.all(16.0),
-                  child: GameBoard(),
+                const Flexible(
+                  child: Center(
+                    child: Card(
+                      margin: EdgeInsets.all(16.0),
+                      child: GameBoard(),
+                    ),
+                  ),
                 ),
                 if (isMobile) ...[
                   const Spacer(),
