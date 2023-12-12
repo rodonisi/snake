@@ -76,7 +76,6 @@ class MyHomePage extends StatelessWidget {
                   ),
                 ),
                 if (isMobile) ...[
-                  const Spacer(),
                   const Controls(),
                 ]
               ],
