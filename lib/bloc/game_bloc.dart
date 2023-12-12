@@ -90,8 +90,7 @@ class SnakeState extends Equatable {
     }
 
     logger.d("move: $_nextPoint");
-    final newState = _checkFood();
-    return newState.placeHead();
+    return placeHead()._checkFood();
   }
 
   SnakeState placeHead() {
