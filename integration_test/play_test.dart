@@ -37,14 +37,18 @@ final shiftToDirection = {
 };
 
 // Function to find the shortest path using BFS
-List<Point<int>> findPath(SnakeState state) {
+List<Point<int>>? bfs(SnakeState state, {Point<int>? override}) {
   const width = SnakeState.gridSize;
   const height = SnakeState.gridSize;
   final start = state.snake.first;
-  final end = state.snake.contains(state.food) ? const Point(0, 0) : state.food;
+  final end = override ?? state.food;
   final obstacles = state.snake.toSet();
   final visited = <Point<int>>{};
   final queue = Queue<List<Point<int>>>();
+
+  if (start == end) {
+    return null;
+  }
 
   queue.add([start]);
 
@@ -71,7 +75,51 @@ List<Point<int>> findPath(SnakeState state) {
     }
   }
 
-  return []; // No path found
+  return null;
+}
+
+// Function to find the shortest path using BFS
+List<Point<int>> findPath(SnakeState state) {
+  const width = SnakeState.gridSize;
+  const height = SnakeState.gridSize;
+  final start = state.snake.first;
+  final obstacles = state.snake.toSet();
+
+  final path = bfs(state) ??
+      bfs(
+        state,
+        override: const Point(0, 0),
+      ) ??
+      bfs(
+        state,
+        override: const Point(SnakeState.gridSize - 1, SnakeState.gridSize - 1),
+      ) ??
+      bfs(
+        state,
+        override: const Point(0, SnakeState.gridSize - 1),
+      ) ??
+      bfs(
+        state,
+        override: const Point(SnakeState.gridSize - 1, 0),
+      );
+
+  if (path != null) {
+    return path;
+  }
+
+  // Don't die
+  for (final direction in Direction.values) {
+    final neighbor = start + direction.shift;
+    if (neighbor.x >= 0 &&
+        neighbor.x < width &&
+        neighbor.y >= 0 &&
+        neighbor.y < height &&
+        !obstacles.contains(neighbor)) {
+      return [start, neighbor];
+    }
+  }
+
+  return []; // Cannot be saved
 }
 
 LogicalKeyboardKey? computeMove(List<Point<int>> path) {
