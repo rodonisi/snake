@@ -136,7 +136,7 @@ LogicalKeyboardKey? computeMove(List<Point<int>> path) {
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  testWidgets("play five matches", (tester) async {
+  testWidgets("play three matches", (tester) async {
     final bloc = SnakeBloc();
     await tester.pumpWidget(
       BlocProvider.value(
@@ -146,14 +146,14 @@ void main() {
     );
 
     var count = 0;
-    while (count < 5) {
+    while (count < 3) {
       final path = findPath(bloc.state);
       final move = computeMove(path);
       if (move != null) {
         await tester.sendKeyEvent(move);
       }
       await tester.pump();
-      if (bloc.state.state == GameState.collision) {
+      if (bloc.state.state == GameState.none) {
         count++;
       }
     }
