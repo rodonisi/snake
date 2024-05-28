@@ -7,17 +7,19 @@ permissions:
   contents: write
 jobs:
   build-and-deploy:
-    concurrency: ci-${{ github.ref }} 
+    concurrency: ci-${{ github.ref }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout 🛎️
         uses: actions/checkout@v3
 
-      - name: Setup Flutter 🔧 
-        uses: subosito/flutter-action@v2
+      - name: Setup Flutter 🔧
+        uses: kuhnroyal/flutter-fvm-config-action@v2
+        id: fvm-config-action
+      - uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.16.3'
-          channel: 'stable'
+          flutter-version: ${{ steps.fvm-config-action.outputs.FLUTTER_VERSION }}
+          channel: ${{ steps.fvm-config-action.outputs.FLUTTER_CHANNEL }}
 
       - name: Build Web 🌐
         run: flutter build web --base-href /${{ github.event.repository.name }}/ --release
@@ -25,4 +27,4 @@ jobs:
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          folder: build/web 
+          folder: build/web
