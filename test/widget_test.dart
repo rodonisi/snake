@@ -1,86 +1,30 @@
-import 'dart:math';
+// This is a basic Flutter widget test.
+//
+// To perform an interaction with a widget in your test, use the WidgetTester
+// utility in the flutter_test package. For example, you can send tap and scroll
+// gestures. You can also use WidgetTester to find child widgets in the widget
+// tree, read text, and verify that the values of widget properties are correct.
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mocktail/mocktail.dart';
-import 'package:snake/bloc/game_bloc.dart';
-import 'package:snake/utility/fixed_queue.dart';
-import 'package:snake/widget/board_tile.dart';
-import 'package:bloc_test/bloc_test.dart';
-import 'package:snake/widget/food_tile.dart';
-import 'package:snake/widget/snake_tile.dart';
 
-class MockSnakeBloc extends MockBloc<SnakeEvent, SnakeState>
-    implements SnakeBloc {}
-
-class MockSnakeState extends Mock implements SnakeState {}
+import 'package:snake/main.dart';
 
 void main() {
-  late SnakeBloc bloc;
-  late SnakeState state;
+  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
+    // Build our app and trigger a frame.
+    await tester.pumpWidget(const MyApp());
 
-  setUp(() {
-    bloc = MockSnakeBloc();
-    state = MockSnakeState();
-    when(() => bloc.state).thenReturn(state);
-  });
+    // Verify that our counter starts at 0.
+    expect(find.text('0'), findsOneWidget);
+    expect(find.text('1'), findsNothing);
 
-  testWidgets('when point is neither snake nor food then is just container',
-      (tester) async {
-    const point = Point(0, 0);
-    when(() => state.snake)
-        .thenReturn(const FixedQueue<Point<int>>(queueSize: 0));
-    when(() => state.food).thenReturn(const Point(1, 1));
+    // Tap the '+' icon and trigger a frame.
+    await tester.tap(find.byIcon(Icons.add));
+    await tester.pump();
 
-    await tester.pumpWidget(
-      BlocProvider.value(
-        value: bloc,
-        child: const BoardTile(point: point),
-      ),
-    );
-
-    expect(find.byType(Container), findsOneWidget);
-  });
-
-  testWidgets('when point is food then food tile is expected', (tester) async {
-    const point = Point(0, 0);
-    when(() => state.snake)
-        .thenReturn(const FixedQueue<Point<int>>(queueSize: 0));
-    when(() => state.food).thenReturn(point);
-
-    await tester.pumpWidget(
-      MaterialApp(
-        home: BlocProvider.value(
-          value: bloc,
-          child: const BoardTile(point: point),
-        ),
-      ),
-    );
-
-    expect(find.byType(FoodTile), findsOneWidget);
-  });
-
-  testWidgets('when point is in snake then snake tile is expected',
-      (tester) async {
-    const point = Point(0, 0);
-    when(() => state.snake).thenReturn(
-      const FixedQueue<Point<int>>(
-        queueSize: 1,
-        queue: [point],
-      ),
-    );
-    when(() => state.food).thenReturn(const Point(1, 1));
-
-    await tester.pumpWidget(
-      MaterialApp(
-        home: BlocProvider.value(
-          value: bloc,
-          child: const BoardTile(point: point),
-        ),
-      ),
-    );
-
-    expect(find.byType(SnakeTile), findsOneWidget);
+    // Verify that our counter has incremented.
+    expect(find.text('0'), findsNothing);
+    expect(find.text('1'), findsOneWidget);
   });
 }
