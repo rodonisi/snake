@@ -29,31 +29,25 @@ enum Direction {
 }
 
 class Snake extends Component
-    with HasGameReference<SnakeGame>, KeyboardHandler {
+    with HasGameReference<SnakeGame>, KeyboardHandler, CollisionCallbacks {
   Direction direction = Direction.none;
-  List<SnakeTile> tiles = [];
-  int length = 5;
-
-  Snake();
+  int length = 4;
 
   void move() {
     if (direction == Direction.none) {
       return;
     }
-
-    tiles.add(SnakeTile()..position = tiles.last.position + direction.vector);
-    add(tiles.last);
+    final tiles = children.whereType<SnakeTile>();
+    add(SnakeTile()..position = tiles.last.position + direction.vector);
     if (tiles.length > length) {
-      final r = tiles.removeAt(0);
-      remove(r);
+      remove(tiles.first);
     }
   }
 
   @override
   FutureOr<void> onLoad() {
     add(TimerComponent(period: 0.2, onTick: move, repeat: true));
-    tiles.add(SnakeTile()..position = game.size / 2);
-    addAll(tiles);
+    add(SnakeTile()..position = game.size / 2);
     return super.onLoad();
   }
 
@@ -72,6 +66,12 @@ class Snake extends Component
     }
 
     return super.onKeyEvent(event, keysPressed);
+  }
+
+  @override
+  void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
+    debugPrint('Collision with $other');
+    super.onCollision(intersectionPoints, other);
   }
 }
 
@@ -93,12 +93,5 @@ class SnakeTile extends RectangleComponent
     }
 
     super.onCollision(intersectionPoints, other);
-  }
-
-  @override
-  void onCollisionStart(
-      Set<Vector2> intersectionPoints, PositionComponent other) {
-    print('Collision start with $other');
-    super.onCollisionStart(intersectionPoints, other);
   }
 }

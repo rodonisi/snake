@@ -39,9 +39,7 @@ class SnakeGame extends FlameGame
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-
     camera.viewfinder.anchor = Anchor.topLeft;
-
     world.add(Board());
     start();
   }
@@ -75,8 +73,12 @@ class SnakeGame extends FlameGame
   }
 
   void placeFood() {
-    final x = Random().nextInt(Constants.gridSize.toInt()) * Constants.tileSize;
-    final y = Random().nextInt(Constants.gridSize.toInt()) * Constants.tileSize;
+    final x =
+        Random().nextInt(Constants.gridSize.toInt()) * Constants.tileSize +
+            Constants.gutter;
+    final y =
+        Random().nextInt(Constants.gridSize.toInt()) * Constants.tileSize +
+            Constants.gutter;
     world.add(Food()..position = Vector2(x.toDouble(), y.toDouble()));
   }
 }
