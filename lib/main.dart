@@ -6,6 +6,11 @@ void main() {
   runApp(
     GameWidget(
       game: SnakeGame(),
+      overlayBuilderMap: {
+        PlayState.gameOver.name: (context, game) => const Center(
+              child: Text('Game Over!'),
+            ),
+      },
     ),
   );
 }

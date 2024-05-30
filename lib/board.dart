@@ -9,19 +9,12 @@ class Board extends RectangleComponent
     with HasGameReference<SnakeGame>, CollisionCallbacks {
   Board()
       : super(
-          paint: Paint()..color = const Color(0xfff2e8cf),
-          children: [RectangleHitbox()],
+          paint: Paint()..color = const Color(0xff333333),
+          children: [RectangleHitbox(collisionType: CollisionType.passive)],
         );
 
   @override
   Future<void> onLoad() async {
     size = Constants.worldSize;
-    return super.onLoad();
-  }
-
-  @override
-  void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
-    print('Collision with $other');
-    super.onCollision(intersectionPoints, other);
   }
 }

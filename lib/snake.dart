@@ -2,8 +2,10 @@ import 'dart:async';
 
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flame/effects.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:snake/board.dart';
 import 'package:snake/constants.dart';
 import 'package:snake/game.dart';
 
@@ -39,7 +41,6 @@ class Snake extends Component
       return;
     }
 
-    print('move');
     tiles.add(SnakeTile()..position = tiles.last.position + direction.vector);
     add(tiles.last);
     if (tiles.length > length) {
@@ -74,9 +75,8 @@ class Snake extends Component
   }
 }
 
-class SnakeTile extends RectangleComponent with CollisionCallbacks {
-  Vector2 direction = Vector2.zero();
-
+class SnakeTile extends RectangleComponent
+    with CollisionCallbacks, HasGameReference<SnakeGame> {
   SnakeTile()
       : super(
           size: Vector2.all(Constants.tileSize - Constants.gutter),
@@ -87,8 +87,18 @@ class SnakeTile extends RectangleComponent with CollisionCallbacks {
 
   @override
   void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
-    print('Collision with $other');
-    direction = Vector2.zero();
+    if (other is SnakeTile || other is Board) {
+      parent?.add(
+          RemoveEffect(onComplete: () => game.playState = PlayState.gameOver));
+    }
+
     super.onCollision(intersectionPoints, other);
+  }
+
+  @override
+  void onCollisionStart(
+      Set<Vector2> intersectionPoints, PositionComponent other) {
+    print('Collision start with $other');
+    super.onCollisionStart(intersectionPoints, other);
   }
 }
