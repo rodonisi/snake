@@ -22,7 +22,7 @@ jobs:
           channel: ${{ steps.fvm-config-action.outputs.FLUTTER_CHANNEL }}
 
       - name: Build Web 🌐
-        run: flutter build web --base-href /${{ github.event.repository.name }}/ --release
+        run: flutter build web --base-href /${{ github.event.repository.name }}/ --release --wasm
 
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4
